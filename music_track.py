@@ -19,6 +19,7 @@ Design decisions to implement:
 """
 
 from abc import ABC, abstractmethod
+from functools import total_ordering
 
 class MusicTrack(ABC):
     """
@@ -58,3 +59,28 @@ class MusicTrack(ABC):
     def total_play_time(self, num_plays: int) -> float:
         """Returns the total duration in seconds for a given number of plays."""
         return self._duration_seconds * num_plays
+    
+@total_ordering
+class MusicTrack:
+    def __init__(self, title, release_year):
+        self.title = title
+        self.release_year = release_year
+
+    def __eq__(self, other):
+        if not isinstance(other, MusicTrack):
+            return NotImplemented
+        return self.release_year == other.release_year
+
+    def __lt__(self, other):
+        if not isinstance(other, MusicTrack):
+            return NotImplemented
+        return self.release_year < other.release_year
+
+    def __repr__(self):
+        return f"{self.title} ({self.release_year})"
+
+# Example Usage:
+# track1 = MusicTrack("Old Song", 1990)
+# track2 = MusicTrack("New Song", 2020)
+# tracks = [track2, track1]
+# sorted_tracks = sorted(tracks)  # Sorts based on release_year
